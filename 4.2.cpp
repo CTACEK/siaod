@@ -133,7 +133,7 @@ void SuperMarket::DelOrder(int id) {
         orders[i] = orders[i + 1];
     }
     countoforders--;
-//    orders = (Order *) realloc (orders,countoforders * sizeof(Order));
+    orders = (Order *) realloc (orders,sizeof(Order) * countoforders);
 }
 
 unsigned int SuperMarket::CalculatingBill(int id) {
@@ -228,6 +228,10 @@ int main() {
 
     superMarket.CreateListOfProcucts();
     superMarket.CreateListOfOrders();
+
+    superMarket.Print();
+
+    superMarket.DelOrder(0);
 
     superMarket.Print();
 
