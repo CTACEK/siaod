@@ -243,11 +243,19 @@ int main() {
     srand(time(0));
 
     SuperMarket superMarket;
+    int x;
     superMarket.CreateListOfProcucts();
 
     superMarket.PrintProducts();
 
     superMarket.CreateListOfOrders();
+
+    superMarket.PrintOrders();
+
+    cout << "Enter id order what you want to delete" << endl;
+    cin >> x;
+
+    superMarket.DelOrder(x);
 
     superMarket.PrintOrders();
 
