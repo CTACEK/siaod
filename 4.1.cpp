@@ -34,7 +34,7 @@ struct Order {
     string fio;
     string number;
     int currentcountofproducts = 0;
-    int listofproducts[N][2];
+    int listofproducts[N][2];//заказы заказчика
 };
 
 struct SuperMarket {

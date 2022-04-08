@@ -1,14 +1,23 @@
-#include <algorithm>
-#include <string>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-int main()
-{
-    char s[4] = "abb";
-    sort(s, s + 3);
-    do {
-        cout << s << endl;
-    } while(next_permutation(s, s + 3));
+void separate(string &s){
+    int n = s.length();
+    int idx = 0;
+    while (idx != string::npos){
+        string word(s.substr(idx, s.find_first_of(" .,:;?!") - n - 1));
+        if (!word.empty())
+            cout << word << endl;
+        idx = s.find_first_of(" .,:;?!") + 1;
+    }
+}
+
+int main(){
+    string sentence;
+    cout << "enter the sentence" << endl;
+    getline(cin, sentence);
+    separate(sentence);
+    return 0;
 }
