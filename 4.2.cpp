@@ -12,7 +12,6 @@
 using namespace std;
 
 
-
 string Products[6] = {"Fish", "Meat", "Egg", "Bread", "Cola", "Juice"};
 string names[4] = {"Ryan Brown", "Davis Ostin", "Mark Mandel", "John Jobs"};
 string numbers[4] = {"+7(936)209-93-10", "+7(981)942-26-08", "+7(941)802-26-23", "+7(970)767-98-51"};
@@ -42,14 +41,16 @@ struct SuperMarket {
     int maxcountofproducts = 6;
     int maxcountoforders = 4;
 
-    Product* products = new Product[maxcountofproducts];
-    Order* orders = new Order[maxcountofproducts];
+    Product *products = new Product[maxcountofproducts];
+    Order *orders = (Order *) malloc(sizeof(Order) * maxcountoforders);
 
     void CreateListOfProcucts();
 
     void CreateListOfOrders();
 
-    void Print();
+    void PrintProducts();
+
+    void PrintOrders();
 
     void AddOrder();
 
@@ -93,8 +94,8 @@ void SuperMarket::CreateListOfOrders() {
     }
     int i = 0;
 
-    while (i < countoforders){
-        if(orders[i].currentcountofproducts == 0){
+    while (i < countoforders) {
+        if (orders[i].currentcountofproducts == 0) {
             DelOrder(orders[i].id);
             i--;
         }
@@ -125,40 +126,56 @@ void SuperMarket::AddOrder() {
 }
 
 void SuperMarket::DelOrder(int id) {
-    for (int i = 0; i < orders[id].currentcountofproducts; i++) {
-        products[orders[id].listofproducts[i][0]].count += orders[id].listofproducts[i][1];
+    bool flag = false;
+    for (int i = 0; i < countoforders; ++i) {
+        if (orders[i].id == id) {
+            flag = true;
+            for (int i = 0; i < orders[id].currentcountofproducts; i++) {
+                products[orders[id].listofproducts[i][0]].count += orders[id].listofproducts[i][1];
+            }
+            orders[id].currentcountofproducts = 0;
+            for (int i = id; i < countoforders - 1; ++i) {
+                orders[i] = orders[i + 1];
+            }
+            countoforders--;
+            orders = (Order *) realloc(orders, countoforders * sizeof(Order));
+        }
+
     }
-    orders[id].currentcountofproducts = 0;
-    for (int i = id; i < countoforders - 1; ++i) {
-        orders[i] = orders[i + 1];
-    }
-    countoforders--;
-//    orders = (Order *) realloc (orders,countoforders * sizeof(Order));
+    if (!flag) cout << "This id not in orders!" << endl;
 }
 
 unsigned int SuperMarket::CalculatingBill(int id) {
     unsigned int sum = 0;
-        for (int i = 0; i < orders[id].currentcountofproducts; i++) {
-            sum += products[orders[id].listofproducts[i][0]].price * orders[id].listofproducts[i][1];
-        }
+    for (int i = 0; i < orders[id].currentcountofproducts; i++) {
+        sum += products[orders[id].listofproducts[i][0]].price * orders[id].listofproducts[i][1];
+    }
     return sum;
 }
 
-void SuperMarket::Print() {
+void SuperMarket::PrintProducts() {
     string cherta = "____________________|____________________|____________________|____________________|";
     cout << "                                  Table of product                                 \n";
     cout << "____________________________________________________________________________________\n";
-    cout << left << setw(20) << "Id Product";cout << "|";
-    cout << left << setw(20) << "Name product";cout << "|";
-    cout << left << setw(20) << "Count product";cout << "|";
-    cout << left << setw(20) << "Price product";cout << "|";
+    cout << left << setw(20) << "Id Product";
+    cout << "|";
+    cout << left << setw(20) << "Name product";
+    cout << "|";
+    cout << left << setw(20) << "Count product";
+    cout << "|";
+    cout << left << setw(20) << "Price product";
+    cout << "|";
     cout << endl;
     cout << cherta << endl;
     for (int i = 0; i < countofproducts; i++) {
-        cout << left << setw(20) << products[i].id;cout << "|";
-        cout << left << setw(20) << products[i].name;cout << "|";
-        cout << left << setw(20) << products[i].count;cout << "|";
-        cout << left << setw(20) << products[i].price;cout << "|";
+        cout << left << setw(20) << products[i].id;
+        cout << "|";
+        cout << left << setw(20) << products[i].name;
+        cout << "|";
+        cout << left << setw(20) << products[i].count;
+        cout << "|";
+        cout << left << setw(20) << products[i].price;
+        cout << "|";
         cout << endl;
         cout << cherta << endl;
     }
@@ -166,21 +183,31 @@ void SuperMarket::Print() {
     cout << endl;
     cout << endl;
     cout << endl;
+}
 
-
+void SuperMarket::PrintOrders() {
+    string cherta = "____________________|____________________|____________________|____________________|";
     cout << "                                  Table of orders                                  \n";
     cout << "____________________________________________________________________________________\n";
-    cout << left << setw(20) << "Id Order";cout << "|";
-    cout << left << setw(20) << "Date order";cout << "|";
-    cout << left << setw(20) << "Fio order";cout << "|";
-    cout << left << setw(20) << "Number order";cout << "|";
+    cout << left << setw(20) << "Id Order";
+    cout << "|";
+    cout << left << setw(20) << "Date order";
+    cout << "|";
+    cout << left << setw(20) << "Fio order";
+    cout << "|";
+    cout << left << setw(20) << "Number order";
+    cout << "|";
     cout << endl;
     cout << cherta << endl;
     for (int i = 0; i < countoforders; i++) {
-        cout << left << setw(20) << orders[i].id;cout << "|";
-        cout << left << setw(20) << orders[i].date;cout << "|";
-        cout << left << setw(20) << orders[i].fio;cout << "|";
-        cout << left << setw(20) << orders[i].number;cout << "|";
+        cout << left << setw(20) << orders[i].id;
+        cout << "|";
+        cout << left << setw(20) << orders[i].date;
+        cout << "|";
+        cout << left << setw(20) << orders[i].fio;
+        cout << "|";
+        cout << left << setw(20) << orders[i].number;
+        cout << "|";
         cout << endl;
         cout << cherta << endl;
     }
@@ -192,13 +219,17 @@ void SuperMarket::Print() {
     for (int i = 0; i < countoforders; ++i) {
         cout << "Table of product in orders person with id " << orders[i].id << "      \n";
         cout << "__________________________________________\n";
-        cout << left << setw(20) << "Id Product";cout << "|";
-        cout << left << setw(20) << "Count product";cout << "|";
+        cout << left << setw(20) << "Id Product";
+        cout << "|";
+        cout << left << setw(20) << "Count product";
+        cout << "|";
         cout << endl;
         cout << "____________________|____________________|" << endl;
         for (int j = 0; j < orders[i].currentcountofproducts; j++) {
-            cout << left << setw(20) << Products[orders[i].listofproducts[j][0]];cout << "|";
-            cout << left << setw(20) << orders[i].listofproducts[j][1];cout << "|";
+            cout << left << setw(20) << Products[orders[i].listofproducts[j][0]];
+            cout << "|";
+            cout << left << setw(20) << orders[i].listofproducts[j][1];
+            cout << "|";
             cout << endl;
             cout << "____________________|____________________|" << endl;
         }
@@ -215,7 +246,7 @@ int main() {
     srand(time(0));
 
     SuperMarket superMarket;
-    int n,k;
+    int n, k, x;
 
     cout << "Enter max count of product > 0 and < 7" << endl;
     cin >> n;
@@ -229,6 +260,14 @@ int main() {
     superMarket.CreateListOfProcucts();
     superMarket.CreateListOfOrders();
 
-    superMarket.Print();
+    superMarket.PrintProducts();
+    superMarket.PrintOrders();
+
+    cout << "Enter id order what you want to delete" << endl;
+    cin >> x;
+
+    superMarket.DelOrder(x);
+
+    superMarket.PrintOrders();
 
 }
