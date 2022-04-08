@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(siaod4.1 4.1.cpp)
 add_executable(siaod4.2 4.2.cpp)
+add_executable(siaod4.3 4.3.cpp)
 add_executable(siaodclass_04.04 siaodclass_04.04.cpp)
 
 add_executable(test test.cpp)

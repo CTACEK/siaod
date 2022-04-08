@@ -1,5 +1,5 @@
 //
-// Created by mrusb on 4/1/2022.
+// Created by mrusb on 4/8/2022.
 //
 
 #include <iostream>
@@ -7,6 +7,7 @@
 #include <time.h>
 #include <iomanip>
 #include <windows.h>
+#include <vector>
 
 
 using namespace std;
@@ -27,7 +28,7 @@ struct Product {
 struct Order {
     static const int k = 10;
     unsigned int id;
-    string date = "";
+    string date = "2022-";
     string fio;
     string number;
     int currentcountofproducts = 0;
@@ -41,8 +42,8 @@ struct SuperMarket {
     int maxcountofproducts = 0;
     int maxcountoforders = 0;
 
-    Product *products;
-    Order *orders;
+    vector<Product> products;
+    vector<Order> orders;
 
     void CreateListOfProcucts();
 
@@ -64,12 +65,12 @@ struct SuperMarket {
 
 };
 
-SuperMarket::SuperMarket(int maxcountofproduct, int maxcountoforder) {
-    maxcountofproducts = maxcountofproduct;
-    maxcountoforders = maxcountoforder;
+SuperMarket::SuperMarket(int maxcountofproducts, int maxcountoforders) {
+    this->maxcountofproducts = maxcountofproducts;
+    this->maxcountoforders = maxcountoforders;
 
-    products = new Product[maxcountofproduct];
-    orders = (Order *) calloc(maxcountoforder, sizeof(Order));
+    products.resize(maxcountofproducts);
+    orders.resize(maxcountoforders);
 }
 
 bool SuperMarket::AddProduct(int numberoforder, int idproduct, int count) {
@@ -96,7 +97,7 @@ void SuperMarket::CreateListOfProcucts() {
 void SuperMarket::CreateListOfOrders() {
     while (countoforders < maxcountoforders) {
         orders[countoforders].id = countoforders;
-        orders[countoforders].date += "2022-" + to_string(rand() % 12 + 1) += "-" + to_string(rand() % 27 + 1);
+        orders[countoforders].date += to_string(rand() % 12 + 1) += "-" + to_string(rand() % 27 + 1);
         orders[countoforders].fio = names[countoforders];
         orders[countoforders].number = numbers[countoforders];
         while (AddProduct(countoforders, rand() % maxcountofproducts + 1, rand() % 9 + 1));
@@ -106,10 +107,11 @@ void SuperMarket::CreateListOfOrders() {
 
     while (i < countoforders) {
         if (orders[i].currentcountofproducts == 0) {
-            DelOrder(orders[i].id);
-            i--;
+            auto iter = orders.cbegin();
+            orders.erase(iter + i);
+            countoforders--;
         }
-        i++;
+        else i++;
     }
 }
 
@@ -143,12 +145,11 @@ void SuperMarket::DelOrder(int id) {
             for (int i = 0; i < orders[id].currentcountofproducts; i++) {
                 products[orders[id].listofproducts[i][0]].count += orders[id].listofproducts[i][1];
             }
-            orders[id].currentcountofproducts = 0;
-            for (int i = id; i < countoforders - 1; ++i) {
-                orders[i] = orders[i + 1];
-            }
+
+            auto iter = orders.cbegin();
+            orders.erase(iter + id);
+
             countoforders--;
-            orders = (Order *) realloc(orders, countoforders * sizeof(Order));
         }
 
     }
@@ -249,6 +250,7 @@ void SuperMarket::PrintOrders() {
 }
 
 
+
 int main() {
     setlocale(LC_ALL, "RUS");
     SetConsoleCP(1251);
@@ -256,6 +258,7 @@ int main() {
     srand(time(0));
 
     int n, k, x;
+
 
     cout << "Enter max count of product > 0 and < 7" << endl;
     cin >> n;
