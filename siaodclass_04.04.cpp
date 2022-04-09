@@ -23,6 +23,7 @@
 
 #include <iostream>
 using namespace std;
+
 struct node {
     int key;
     char data;
