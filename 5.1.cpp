@@ -28,7 +28,6 @@ Node *create_list() {
             list = add_node(list, temp);
             break;
         }
-//        if (temp == "C") break;
         list = add_node(list, temp);
     }
     return list;
