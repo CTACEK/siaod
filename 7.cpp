@@ -1,5 +1,7 @@
+//
+// Created by CTACEK on 4/18/2022.
+//
 #include <iostream>
-#include <stack>
 
 using namespace std;
 
@@ -12,28 +14,34 @@ struct Node {
 template<typename T>
 struct Stack {
     Node<T> *head = nullptr;
-
-    void push(T data) {
-        Node<T> *temp = new Node<T>;
-        temp->data = data;
-        temp->next = head;
-        head = temp;
-    }
-
-    T pop() {
-        Node<T> *temp = head;
-        head = head->next;
-        T temp_value = temp->data;
-        free(temp);
-        return temp_value;
-    }
-
-    T top() {
-        return head->data;
-    }
+    void push(T data);
+    T pop();
+    T top();
 };
 
-// 1- первая операция выше второй по приоритету 0 - одинаково -1 - ниже
+template<typename T>
+void Stack<T>::push(T data) {
+    Node<T> *temp = new Node<T>;
+    temp->data = data;
+    temp->next = head;
+    head = temp;
+}
+
+template<typename T>
+T Stack<T>::pop() {
+    Node<T> *temp = head;
+    head = head->next;
+    T temp_value = temp->data;
+    free(temp);
+    return temp_value;
+}
+
+template<typename T>
+T Stack<T>::top() {
+    return head->data;
+}
+
+
 int compare(char a, char b) {
     string first_class = "+-";
     string second_class = "*/";
@@ -46,45 +54,39 @@ int compare(char a, char b) {
     }
 }
 
-// строка является операцией
+
 bool is_operation(char a) {
     return a == '+' || a == '-' || a == '*' || a == '/';
 }
 
-// строка является скобкой
+
 bool is_bracket(char a) {
     return a == '(' || a == ')';
 }
 
 int operation(char i, int a, int b) {
     switch (i) {
-        case '+':
-            return b + a;
-        case '-':
-            return b - a;
-        case '*':
-            return b * a;
-        case '/':
-            return b / a;
+        case '+':return b + a;
+        case '-':return b - a;
+        case '*':return b * a;
+        case '/':return b / a;
     }
 }
 
-// выполнить одну операцию из стека операций над двумя элементами из стека оперантов
+
 void make_one_operation(Stack<char> &operations, Stack<int> &letters) {
     int operand2 = letters.pop();
     int operand1 = letters.pop();
     int result = operation(operations.pop(), operand2, operand1);
-    cout << result << '\t' << operand2 << '\t' << operand1 << endl;
-//    int result = operations.pop() + operand1 + operand2;
     letters.push(result);
 }
 
-// выполнить все операции из стека операций
+
 void make_all_operations(Stack<char> &operations, Stack<int> &letters) {
     while (operations.head != nullptr) make_one_operation(operations, letters);
 }
 
-// выполнить все операции из стека операций внутри скобок
+
 void make_brackets_operations(Stack<char> &operations, Stack<int> &letters) {
     while (operations.top() != '(') make_one_operation(operations, letters);
 }
@@ -117,7 +119,8 @@ int inf_to_result(string s) {
 
 int main() {
     string input;
-    cout << "Введите число в инфиксной форме:\n";
+    cout << "Enter your expression in infix form:\n";
     cin >> input;
-    cout << inf_to_result(input) << endl;
+    cout << "Answer: " <<inf_to_result(input) << endl;
 }
+

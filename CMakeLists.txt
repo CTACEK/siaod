@@ -3,7 +3,8 @@ project(siaod)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(siaod8.1 8.1.cpp)
+add_executable(siaod8 8.cpp)
+
 
 
 add_executable(test test.cpp)
