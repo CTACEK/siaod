@@ -82,7 +82,7 @@ void stooge_sort(int *array, int left, int right) {
 }
 
 int main() {
-    const int size = 100;
+    const int size = 10000;
     int array[size];
 
     cout << "\nBefore sorting:" << endl;
