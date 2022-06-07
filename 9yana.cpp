@@ -116,40 +116,7 @@ int AutoBook::find_auto_fib(int number) {
     }
 }
 
-int fibonacciSearch(Auto* table, int n, int key)
-{
-    if (table[0].number == key)
-        return 0;
-    int start = -1, f0 = 0, f1 = 1, f2 = 1, index;
-    while (f2 < n)
-    {
-        f0 = f1;
-        f1 = f2;
-        f2 = f0 + f1;
-    }
-    while (f2 >= 2)
-    {
-        index = (start + f0 <= n - 1 ? start + f0 : n - 1);
-        if (table[index].number < key)
-        {
-            f2 = f1;
-            f1 = f0;
-            f0 = f2 - f1;
-            start = index;
-        }
-        else if (table[index].number > key)
-        {
-            f2 = f0;
-            f1 = f1 - f0;
-            f0 = f2 - f1;
-        }
-        else
-            return index;
-    }
-    if (f1 && (table[n - 1].number == key))
-        return n - 1;
-    return -1;
-}
+
 
 int main() {
     int n;
@@ -163,7 +130,7 @@ int main() {
     auto begin1 = chrono::steady_clock::now();
     autoBook.find_auto(index);
     auto end1 = chrono::steady_clock::now();
-    cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end1 - begin1).count() / pow(10, 6) << " mircosec"
+    cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end1 - begin1).count() << " mircosec"
          << endl;
     //cout << "Info: " << autoBook.Autos[res_lin].info << "\tMark: " << autoBook.Autos[res_lin].mark << endl;
 
@@ -173,7 +140,7 @@ int main() {
     auto begin2 = chrono::steady_clock::now();
     autoBook.find_auto_barrier(index);
     auto end2 = chrono::steady_clock::now();
-    cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end2 - begin2).count() / pow(10, 6) << " mircosec"
+    cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end2 - begin2).count() << " mircosec"
          << endl;
     //cout << "Info: " << autoBook.Autos[res_bar].info << "\tMark: " << autoBook.Autos[res_bar].mark << endl;
 
@@ -192,11 +159,5 @@ int main() {
     auto end3 = chrono::steady_clock::now();
     cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end3 - begin3).count() << " mircosec" << endl;
 
-    cout << endl;
-
-    auto begin4 = chrono::steady_clock::now();
-    fibonacciSearch(autoBook.Autos,n,index);
-    auto end4 = chrono::steady_clock::now();
-    cout << "Time: " << chrono::duration_cast<chrono::microseconds>(end4 - begin4).count() << " mircosec" << endl;
     return 0;
 }
